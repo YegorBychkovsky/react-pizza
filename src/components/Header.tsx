@@ -1,11 +1,33 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Search } from './Search';
 import logoSvg from '../assets/img/pizza-logo.svg';
 import { selectCart } from '../redux/slices/cart/selectors';
 
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import DialogWindow from './DialogWindow';
+import { changeLoginState, changeOpenState } from '../redux/slices/authorization/slice';
+import { loginSelect } from '../redux/slices/authorization/exports';
+
 export const Header = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const token = localStorage.getItem('token');
+  const loginRedux = useSelector(loginSelect);
+  const [login, setLogin] = React.useState(false);
+  const [updatePage, setUpdatePage] = React.useState(false);
+
+  // React.useEffect(() => {
+  //   loginRedux ? setUpdatePage(true) : setUpdatePage(false);
+  // }, [loginRedux]);
+
+  React.useEffect(() => {
+    token ? setLogin(true) : setLogin(false);
+  }, [token]);
+
   const { items, totalPrice } = useSelector(selectCart);
   const { pathname } = useLocation();
   const isMounted = React.useRef(false);
@@ -20,6 +42,17 @@ export const Header = () => {
     isMounted.current = true;
   }, [items]);
 
+  const handleClickLogin = React.useCallback(() => {
+    dispatch(changeOpenState(true));
+  }, []);
+
+  const handleClickLogoff = React.useCallback(() => {
+    localStorage.clear();
+    dispatch(changeLoginState(false));
+    dispatch(changeOpenState(false));
+    navigate('/');
+  }, []);
+
   return (
     <div className="header">
       <div className="container">
@@ -33,6 +66,30 @@ export const Header = () => {
           </div>
         </Link>
         {pathname !== '/cart' && <Search />}
+        <Stack spacing={2} direction="row">
+          {login || loginRedux ? (
+            <Button
+              onClick={handleClickLogoff}
+              sx={{
+                bgcolor: '#fe5f1d',
+                textTransform: 'none',
+                ':hover': { bgcolor: '#66260b' },
+              }}
+              className="profile-btn"
+              variant="contained">
+              LogOff
+            </Button>
+          ) : (
+            <Button
+              onClick={handleClickLogin}
+              sx={{ bgcolor: '#fe5f1d', ':hover': { bgcolor: '#66260b' } }}
+              className="profile-btn"
+              variant="contained">
+              Login
+            </Button>
+          )}
+        </Stack>
+        <DialogWindow />
         <div className="header__cart">
           {pathname !== '/cart' && (
             <Link to="/cart" className="button button--cart">

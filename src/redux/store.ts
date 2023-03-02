@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import filter from './slices/filter/slice';
 import cart from './slices/cart/slice';
 import pizza from './slices/pizza/slice';
+import authorization from './slices/authorization/slice';
 import { useDispatch } from 'react-redux';
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
     filter,
     cart,
     pizza,
+    authorization,
   },
 });
 

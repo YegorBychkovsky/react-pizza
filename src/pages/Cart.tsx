@@ -6,14 +6,22 @@ import { CartItemBlock } from '../components/CartItem';
 import { CartEmpty } from '../components/CartEmpty';
 import { selectCart } from '../redux/slices/cart/selectors';
 import { clearItems } from '../redux/slices/cart/slice';
+import { loginSelect } from '../redux/slices/authorization/exports';
 
 const Cart: React.FC = () => {
   const dispatch = useDispatch();
+  const token = localStorage.getItem('token');
+  const login = useSelector(loginSelect);
+
   const { totalPrice, items } = useSelector(selectCart);
   const onClickClear = () => {
     dispatch(clearItems());
   };
   const totalCount = items.reduce((sum: number, item: any) => sum + item.count, 0);
+
+  const orderCreate = () => {
+    token || login ? alert('Заказ выполнен!') : alert('Вы не зарегестрированы');
+  };
 
   if (!totalPrice) {
     return <CartEmpty />;
@@ -121,7 +129,7 @@ const Cart: React.FC = () => {
 
               <span>Вернуться назад</span>
             </Link>
-            <div className="button pay-btn">
+            <div onClick={orderCreate} className="button pay-btn">
               <span>Оплатить сейчас</span>
             </div>
           </div>

@@ -4,13 +4,59 @@
   border-bottom: 1px solid $gray-line;
   padding: 40px 0;
 
-
   .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    @media(max-width: 645px) {
+    .profile-btn {
+      background: #fe5f1d;
+
+      &:hover {
+        background: #66260b;
+      }
+    }
+
+    .profile {
+      margin-right: -200px;
+
+      height: 50px;
+      width: 50px;
+
+      border-radius: 50%;
+      color: white;
+      background-color: #fe5f1d;
+
+      transition: 0.3s;
+      &__img {
+        margin-top: 7px;
+        margin-left: 10px;
+      }
+      &:hover {
+        background-color: #c5450e;
+      }
+    }
+    .login {
+      margin-right: -200px;
+      padding-top: 8px;
+
+      height: 40px;
+      width: 100px;
+
+      border-radius: 20px;
+
+      text-align: center;
+      color: white;
+      background-color: #fe5f1d;
+
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        background-color: #c5450e;
+      }
+    }
+    @media (max-width: 645px) {
       flex-direction: column;
 
       .header__cart {
